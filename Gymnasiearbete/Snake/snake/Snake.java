@@ -6,19 +6,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
-public class Snake extends JPanel implements KeyListener, ActionListener {
+public class Snake extends JPanel implements ActionListener {
 
-	final int width = 400;
-	final int height = 400;
-	final int unitSize = 20;
-	final int allUnits = (width * height) / (unitSize * unitSize);
 	int delay = 180;
+	int width = 400;
+	int height = 400;
+	int unitSize = 20;
+	int allUnits = (width * height) / (unitSize * unitSize);
 	Image bg;
 
-	final int x[] = new int[allUnits];			
-	final int y[] = new int[allUnits];
+	int x[] = new int[allUnits];	//ormen är "fulla positioner" som rör sig i spelplans-arrayn 
+	int y[] = new int[allUnits];
 
 	int bodyParts = 3;
 	int applesEaten;
@@ -38,17 +37,15 @@ public class Snake extends JPanel implements KeyListener, ActionListener {
 		addKeyListener(new TAdapter());
 		setFocusable(true);
 
-		x[0] = width / 2;  // Mitt på spelplanen horisontellt
-		y[0] = height / 2; // Mitt på spelplanen vertikalt
+		x[0] = width / 2;  //Mitt på spelplanen horisontellt
+		y[0] = height / 2; //Mitt på spelplanen vertikalt
 		for (int i = 1; i < bodyParts; i++) {
-			x[i] = x[0] - i * unitSize; // Placera kroppsdelarna till vänster om huvudet
-			y[i] = y[0]; // Alla kroppsdelar är på samma rad
+			x[i] = x[0] - i * unitSize; //Placera kroppsdelarna till vänster om huvudet
+			y[i] = y[0]; //Alla kroppsdelar är på samma rad
 		}
 
 		setPreferredSize(new Dimension(width, height));
-
 		bg =  Toolkit.getDefaultToolkit().getImage(getClass().getResource("/snakeBg.png"));
-
 		startGame();
 	}
 
@@ -100,7 +97,6 @@ public class Snake extends JPanel implements KeyListener, ActionListener {
 				break;
 			}
 
-
 			for (int i = 0; i < bodyParts; i++) {
 				if (i == 0) {
 					g.setColor(Color.GREEN);
@@ -109,8 +105,8 @@ public class Snake extends JPanel implements KeyListener, ActionListener {
 				}
 				g.fillRect(x[i], y[i], unitSize, unitSize);
 			}
-
-			Toolkit.getDefaultToolkit().sync();
+			
+			Toolkit.getDefaultToolkit().sync(); //minskar lagg 
 		} else {
 			gameOver(g);
 		}
@@ -122,7 +118,7 @@ public class Snake extends JPanel implements KeyListener, ActionListener {
 			System.out.println(rng);
 			appleX = (int) (Math.random() * (width / unitSize)) * unitSize;;
 			appleY = (int) (Math.random() * (width / unitSize)) * unitSize;;
-			
+
 			for(int i = bodyParts; i >= 0; i--) {	//kollar om äpplets position = position på ormens kroppsdelar, isåfall kör om positionerna
 				if((x[i] == appleX) && (y[i] == appleY)) {
 					validPosition = false;
@@ -138,7 +134,7 @@ public class Snake extends JPanel implements KeyListener, ActionListener {
 
 	private void move() {
 		for (int i = bodyParts; i > 0; i--) {
-			x[i] = x[i - 1];
+			x[i] = x[i - 1]; //positionen bakom hoppar fram ett steg
 			y[i] = y[i - 1];
 		}
 
@@ -253,6 +249,7 @@ public class Snake extends JPanel implements KeyListener, ActionListener {
 		repaint();
 	}
 
+	//rörelse
 	private class TAdapter extends KeyAdapter {
 		@Override
 		public void keyPressed(KeyEvent e) {
@@ -288,25 +285,6 @@ public class Snake extends JPanel implements KeyListener, ActionListener {
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-
-
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 }
